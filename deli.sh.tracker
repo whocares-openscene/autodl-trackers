@@ -24,61 +24,61 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <trackerinfo
-	type="ipt"
-	shortName="IPT"
-	longName="IPTorrents"
-	siteName="www.iptorrents.com">
+	type="deli.sh"
+	shortName="deli.sh"
+	longName="deli.sh"
+	siteName="deli.sh">
 
 	<settings>
-		<description text="Go to IPTorrents site and click on your username under the logo to find your passkey."/>
-		<passkey tooltiptext="Copy the passkey from your details page"/>
+		<gazelle_description/>
+		<gazelle_authkey/>
+		<gazelle_torrent_pass/>
 	</settings>
 
 	<servers>
 		<server
-			network="IPTorrents"
-			serverNames="irc.iptorrents.com"
-			channelNames="#ipt.announce,#ipt.announce2"
-			announcerNames="IPT,FunTimes"
+			network="Delish-Network"
+			serverNames="irc.deli.sh"
+			channelNames="#deli.sh"
+			announcerNames="Delish"
 			/>
 	</servers>
 
 	<parseinfo>
 		<linepatterns>
 			<extract>
-				<!--[Movie/XXX] Audrey Bitoni HD Pack FREELEECH - http://www.iptorrents.com/details.php?id=789421 - 14.112 GB-->
-				<!--[Movies/XviD] The First Men In The Moon 2010 DVDRip XviD-VoMiT - http://www.iptorrents.com/details.php?id=396589 - 716.219 MB-->
-				<regex value="^\[([^\]]*)](.*)-\s+https?\:\/\/([^\/]+).*[&amp;\?]id=(\d+)\s*-(.*)"/>
+				<!--[Books] :: Betty Crocker - Betty Crocker's New Cake Decorating (Betty Crocker Cooking)  (1999) :: EPUB :: http://deli.sh/torrents.php?id=8814 / http://deli.sh/torrents.php?action=download&id=10182 | https://deli.sh/torrents.php?id=8814 / https://deli.sh/torrents.php?action=download&id=10182-->
+				<!--[Books] :: Carla Emery - The Encyclopedia of Country Living, 40th Anniversary Edition: The Original Manual of Living Off the Land & Doing It Yourself  (2012) :: PDF :: http://deli.sh/torrents.php?id=8821 / http://deli.sh/torrents.php?action=download&id=10189 | https://deli.sh/torrents.php?id=8821 / https://deli.sh/torrents.php?action=download&id=10189-->
+				<regex value="\[(.*)] :: (.*) :: (.*) :: .* / (https?://deli.sh/torrents.php.*=)(\d+)"/>
 				<vars>
 					<var name="category"/>
 					<var name="torrentName"/>
+					<var name="format"/>
 					<var name="$baseUrl"/>
 					<var name="$torrentId"/>
-					<var name="torrentSize"/>
 				</vars>
 			</extract>
 		</linepatterns>
 		<linematched>
-			<var name="freeleech">
-				<string value="false"/>
-			</var>
-
-			<setregex srcvar="torrentName" regex="FREELEECH" varName="freeleech" newValue="true"/>
-			<varreplace name="torrentName" srcvar="torrentName" regex="FREELEECH\s*" replace=""/>
+			<extract srcvar="torrentName">
+				<regex value="(.*?) - (.*)\s+\((\d+)\)"/>
+				<vars>
+					<var name="name1"/>
+					<var name="name2"/>
+					<var name="year"/>
+				</vars>
+			</extract>
 
 			<var name="torrentUrl">
-				<string value="https://"/>
 				<var name="$baseUrl"/>
-				<string value="/download.php/"/>
 				<var name="$torrentId"/>
-				<string value="/"/>
-				<varenc name="torrentName"/>
-				<string value=".torrent?torrent_pass="/>
-				<var name="passkey"/>
+				<string value="&amp;authkey="/>
+				<var name="authkey"/>
+				<string value="&amp;torrent_pass="/>
+				<var name="torrent_pass"/>
 			</var>
 		</linematched>
 		<ignore>
-			<regex value="details\.php\?id=\d+" expected="false"/>
 		</ignore>
 	</parseinfo>
 </trackerinfo>

@@ -16,7 +16,7 @@
    -
    - The Initial Developer of the Original Code is
    - David Nilsson.
-   - Portions created by the Initial Developer are Copyright (C) 2010
+   - Portions created by the Initial Developer are Copyright (C) 2010, 2011
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
@@ -24,64 +24,52 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <trackerinfo
-	type="flr"
-	shortName="FLR"
-	longName="filelist.ro"
-	siteName="filelist.ro">
+	type="hdl"
+	shortName="HDL"
+	longName="HD4Free"
+	siteName="hd4free.xyz">
 
 	<settings>
-		<description text="Go to http://filelist.ro/getrss.php to get the RSS feed link. Paste it (Ctrl+V) into the text box below to automatically extract passkey."/>
-		<passkey/>
+		<description text="Paste (Ctrl+V) any hd4free.xyz torrent direct download (RSS) link into the text box below to automatically extract passkey."/>
+		<passkey
+			tooltiptext="The passkey in your hd4free RSS feed."
+			pasteRegex="[&amp;]torrent_pass=([\da-fA-F]{32})"/>
 	</settings>
 
 	<servers>
 		<server
-			network="P2P-NET"
-			serverNames="irc.p2p-network.net,irc.p2p-irc.net"
-			channelNames="#filelist"
-			announcerNames="Announce"
+			network="HD4FREE-IRC"
+			serverNames="irc.hd4free.xyz"
+			channelNames="#announce"
+			announcerNames="NuLL"
 			/>
 	</servers>
 
 	<parseinfo>
 		<linepatterns>
 			<extract>
-				<regex value="New Torrent: (.*?) (?:-- (.*) )?-- \[(.*)] \[(.*)] -- (https?://filelist.ro/).*id=(.*) -- by (.*)"/>
+				<!--New Torrent: 47 Ronin 2013 BluRay 1080p DTS-HD x264-LEGi0N By: greyshadow Size: 11.29 GB Link: https://hd4free.xyz/details.php?id=3940-->
+				<regex value="New Torrent: (.*) By: (.*) Size: (.*) Link: https?\:\/\/([^\/]+\/).*[&amp;\?]id=(\d+)"/>
 				<vars>
 					<var name="torrentName"/>
-					<var name="$releaseTags"/>
-					<var name="category"/>
+					<var name="uploader"/>
 					<var name="torrentSize"/>
 					<var name="$baseUrl"/>
 					<var name="$torrentId"/>
-					<var name="uploader"/>
 				</vars>
 			</extract>
 		</linepatterns>
 		<linematched>
-			<var name="freeleech">
-				<string value="false"/>
-			</var>
-
-			<varreplace name="tags" srcvar="$releaseTags" regex="[\[\]]" replace=""/>
-
-			<extracttags srcvar="tags" split="--">
-				<setvarif varName="origin" regex="^(?:Internal!)$"/>
-				<setvarif varName="freeleech" value="Freeleech!" newValue="true"/>
-			</extracttags>
-
 			<var name="torrentUrl">
+				<string value="http://"/>
 				<var name="$baseUrl"/>
-				<string value="download.php?id="/>
+				<string value="download.php?torrent="/>
 				<var name="$torrentId"/>
-				<string value="&amp;file="/>
-				<varenc name="torrentName"/>
-				<string value=".torrent&amp;passkey="/>
+				<string value="&amp;torrent_pass="/>
 				<var name="passkey"/>
 			</var>
 		</linematched>
 		<ignore>
-			<regex value="^New!\s*(.*)-" expected="false"/>
 		</ignore>
 	</parseinfo>
 </trackerinfo>

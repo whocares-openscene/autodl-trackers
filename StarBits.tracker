@@ -16,7 +16,7 @@
    -
    - The Initial Developer of the Original Code is
    - David Nilsson.
-   - Portions created by the Initial Developer are Copyright (C) 2010
+   - Portions created by the Initial Developer are Copyright (C) 2010, 2011
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
@@ -24,64 +24,49 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <trackerinfo
-	type="flr"
-	shortName="FLR"
-	longName="filelist.ro"
-	siteName="filelist.ro">
+	type="StarBits"
+	shortName="StarBits"
+	longName="StarBits"
+	siteName="starbits.nu">
 
 	<settings>
-		<description text="Go to http://filelist.ro/getrss.php to get the RSS feed link. Paste it (Ctrl+V) into the text box below to automatically extract passkey."/>
+		<description text="Go to http://starbits.nu/getrss.php to get the RSS feed link. Paste it (Ctrl+V) into the text box below to automatically extract passkey."/>
 		<passkey/>
 	</settings>
 
 	<servers>
 		<server
-			network="P2P-NET"
-			serverNames="irc.p2p-network.net,irc.p2p-irc.net"
-			channelNames="#filelist"
-			announcerNames="Announce"
+			network="ZeNet"
+			serverNames="portlane.se.eu.zenet.org"
+			channelNames="#StarBits"
+			announcerNames="StarBits"
 			/>
 	</servers>
 
 	<parseinfo>
 		<linepatterns>
 			<extract>
-				<regex value="New Torrent: (.*?) (?:-- (.*) )?-- \[(.*)] \[(.*)] -- (https?://filelist.ro/).*id=(.*) -- by (.*)"/>
+				<regex value="^\[Ny Uppladdning]\s\[.*]\s(.*)\[\s(.*)\]\s\[\shttp:\/\/www.starbits.nu\/details.php\?id=([0-9]{1,6})\s]?"/>
 				<vars>
 					<var name="torrentName"/>
-					<var name="$releaseTags"/>
-					<var name="category"/>
 					<var name="torrentSize"/>
-					<var name="$baseUrl"/>
 					<var name="$torrentId"/>
-					<var name="uploader"/>
 				</vars>
 			</extract>
 		</linepatterns>
 		<linematched>
-			<var name="freeleech">
-				<string value="false"/>
-			</var>
-
-			<varreplace name="tags" srcvar="$releaseTags" regex="[\[\]]" replace=""/>
-
-			<extracttags srcvar="tags" split="--">
-				<setvarif varName="origin" regex="^(?:Internal!)$"/>
-				<setvarif varName="freeleech" value="Freeleech!" newValue="true"/>
-			</extracttags>
-
 			<var name="torrentUrl">
-				<var name="$baseUrl"/>
-				<string value="download.php?id="/>
+				<string value="http://www.starbits.nu/download.php"/>
+				<string value="/"/>
 				<var name="$torrentId"/>
-				<string value="&amp;file="/>
-				<varenc name="torrentName"/>
-				<string value=".torrent&amp;passkey="/>
+				<string value="/"/>
 				<var name="passkey"/>
+				<string value="/"/>
+				<varenc name="torrentName"/>
+				<string value=".torrent"/>
 			</var>
 		</linematched>
 		<ignore>
-			<regex value="^New!\s*(.*)-" expected="false"/>
 		</ignore>
 	</parseinfo>
 </trackerinfo>

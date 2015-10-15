@@ -20,34 +20,39 @@
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
-   -
+   - THEGURUDK
    - ***** END LICENSE BLOCK ***** -->
 
 <trackerinfo
-	type="dks"
-	shortName="dks"
-	longName="DK-Scene"
-	siteName="dk-scene.org">
+	type="CB"
+	shortName="CB"
+	longName="CloneBits"
+	siteName="CloneBits.org">
 
 	<settings>
-		<description text="Paste (Ctrl+V) any DK-Scene RSS link into the box below to automatically extrart the passkey"/>
+		<description text="Paste (Ctrl+V) any CloneBits RSS link into the box below to automatically extract the passkey"/>
 		<passkey tooltiptext="The passkey in any RSS link."/>
 	</settings>
 
 	<servers>
 		<server
-			network="DK-Scene.org"
-			serverNames="irc.DK-Scene.org"
-			channelNames="#announce"
-			announcerNames="DK-Scene"
+			network="CloneIRC"
+			serverNames="irc.clonebits.org"
+			channelNames="#CB-Info"
+			announcerNames="CloneBot"
 		/>
 	</servers>
 
 	<parseinfo>
 		<linepatterns>
 			<extract>
-				<!-- NYT UPLOAD ~ Kato - Show You Love 2015 Single 320Kbps - Sound4You (Music) ~ https://www.dk-scene.org/details.php?id=1400&hit=1 -->
-				<regex value="NYT UPLOAD ~ (.*) \((.*)\) ~ (https:\/\/.*\/).*id=(\d+)"/>
+				<!-- [TRACKER] [TORRENT] Name: Stille.Hjerte.2014.DANISH.PAL.DVDR-WILDER Type: Movies - Danish URL: http://clonebits.org/details.php?id=23966 -->
+				<!-- [TRACKER] [TORRENT] Name: Seventh.Son.2015.Custom.DKsubs.NTSC.DVDR-UNiTY Type: Movies - DVD-R URL: http://clonebits.org/details.php?id=23967 -->
+				<!-- [TRACKER] [TORRENT] Name: Sword.of.Vengeance.2015.Custom.DKsubs.NTSC.DVDR-UNiTY Type: Movies - DVD-R URL: http://clonebits.org/details.php?id=23968 -->
+				<!-- [TRACKER] [TORRENT] Name: Big.Hero.6.2014.Custom.DKsubs.REMUX.1080p.BluRay.DTS-HD.MA.7.1.AVC-SUBLiME Type: Movies - x264 URL: http://clonebits.org/details.php?id=23973 -->
+				<!-- [TRACKER] [TORRENT] Name: Force.Majeure.2014.NORDiC.NTSC.DVDR-DAWGS Type: Movies - DVD-R URL: http://clonebits.org/details.php?id=23974 -->
+				<!-- [TRACKER] [TORRENT] Name: Lær at spille guitar med Ole Kibsgaard Type: Movies - Danish URL: http://clonebits.org/details.php?id=23975 -->
+				<regex value="\[.*TORRENT\] Name: (.*) Type: (.*) URL: (.*\/).*id=(\d+)$"/>
 				<vars>
 					<var name="torrentName"/>
 					<var name="category"/>
@@ -57,6 +62,7 @@
 			</extract>
 		</linepatterns>
 		<linematched>
+			<!-- Stille.Hjerte.2014.DANISH.PAL.DVDR-WILDER -->
 			<extract srcvar="torrentName" optional="true">
 				<regex value="(?:.*?[\._\s])+.*?-(.*?)(?:\..*)?$"/>
 				<vars>
@@ -64,7 +70,7 @@
 				</vars>
 			</extract>
 
-			<!-- https://www.dk-scene.org/download.php?torrent=1398&passkey= -->
+			<!-- http://clonebits.org/download.php?torrent=<ID>&passkey=<PASSKEY> -->
 			<var name="torrentUrl">
 				<var name="$baseUrl"/>
 				<string value="download.php?torrent="/>

@@ -16,7 +16,7 @@
    -
    - The Initial Developer of the Original Code is
    - David Nilsson.
-   - Portions created by the Initial Developer are Copyright (C) 2010
+   - Portions created by the Initial Developer are Copyright (C) 2010, 2011
    - the Initial Developer. All Rights Reserved.
    -
    - Contributor(s):
@@ -24,64 +24,54 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <trackerinfo
-	type="flr"
-	shortName="FLR"
-	longName="filelist.ro"
-	siteName="filelist.ro">
+	type="mactorrents"
+	shortName="MacTorrents"
+	longName="Mac-Torrents"
+	siteName="www.mac-torrents.me">
 
 	<settings>
-		<description text="Go to http://filelist.ro/getrss.php to get the RSS feed link. Paste it (Ctrl+V) into the text box below to automatically extract passkey."/>
-		<passkey/>
+		<gazelle_description/>
+		<gazelle_authkey/>
+		<gazelle_torrent_pass/>
 	</settings>
 
 	<servers>
 		<server
-			network="P2P-NET"
-			serverNames="irc.p2p-network.net,irc.p2p-irc.net"
-			channelNames="#filelist"
-			announcerNames="Announce"
+			network="p2p-net"
+			serverNames="irc.p2p-network.net"
+			channelNames="#mac-torrents.announce"
+			announcerNames="MTBot"
 			/>
 	</servers>
 
 	<parseinfo>
 		<linepatterns>
 			<extract>
-				<regex value="New Torrent: (.*?) (?:-- (.*) )?-- \[(.*)] \[(.*)] -- (https?://filelist.ro/).*id=(.*) -- by (.*)"/>
+               <!-- New Upload: WireframeSketcher v4.4..5  by transcendenz   - https://mac-torrents.me/torrents.php?id=5377 / https://mac-torrents.me/torrents.php?action=download&id=5378 - graphics-->
+				<regex value="^New Upload:\s(.*)\s*by\s(.*)\s*-\shttps?:.*[&amp;\?]id=.*https?\:\/\/([^\/]+\/).*[&amp;\?]id=(\d+)\s-\s*(.*)"/>
 				<vars>
 					<var name="torrentName"/>
-					<var name="$releaseTags"/>
-					<var name="category"/>
-					<var name="torrentSize"/>
+					<var name="uploader"/>
 					<var name="$baseUrl"/>
 					<var name="$torrentId"/>
-					<var name="uploader"/>
+                    <var name="tags"/>
+
 				</vars>
 			</extract>
 		</linepatterns>
 		<linematched>
-			<var name="freeleech">
-				<string value="false"/>
-			</var>
-
-			<varreplace name="tags" srcvar="$releaseTags" regex="[\[\]]" replace=""/>
-
-			<extracttags srcvar="tags" split="--">
-				<setvarif varName="origin" regex="^(?:Internal!)$"/>
-				<setvarif varName="freeleech" value="Freeleech!" newValue="true"/>
-			</extracttags>
-
 			<var name="torrentUrl">
+				<string value="https://"/>
 				<var name="$baseUrl"/>
-				<string value="download.php?id="/>
+				<string value="torrents.php?action=download&amp;id="/>
 				<var name="$torrentId"/>
-				<string value="&amp;file="/>
-				<varenc name="torrentName"/>
-				<string value=".torrent&amp;passkey="/>
-				<var name="passkey"/>
+				<string value="&amp;authkey="/>
+				<var name="authkey"/>
+				<string value="&amp;torrent_pass="/>
+				<var name="torrent_pass"/>
 			</var>
 		</linematched>
 		<ignore>
-			<regex value="^New!\s*(.*)-" expected="false"/>
 		</ignore>
 	</parseinfo>
 </trackerinfo>
