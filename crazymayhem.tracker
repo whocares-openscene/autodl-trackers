@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is IRC Auto Downloader.
+   -
+   - The Initial Developer of the Original Code is
+   - David Nilsson.
+   - Portions created by the Initial Developer are Copyright (C) 2010, 2011
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s):
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<trackerinfo
+	type="crazymayhem"
+	shortName="CM"
+	longName="Crazy-Mayhem"
+	siteName="crazy-mayhem.ninja">
+
+	<settings>
+		<description text="Grab your RSS feed link and paste below to extract your passkey."/>
+		<passkey
+			tooltiptext="The passkey in your Crazy-Mayhem RSS feed link."
+			pasteRegex="[\?&amp;]passkey=([\da-zA-Z]{32})"
+			/>
+	</settings>
+
+	<servers>
+		<server
+			network="Crazy-Mayhem"
+			serverNames="irc.crazy-mayhem.ninja"
+			channelNames="#announce"
+			announcerNames="CMSlut"
+			/>
+	</servers>
+
+	<parseinfo>
+		<linepatterns>
+			<extract>
+				<!--[ New Torrent ] [ Law.and.Order.SVU.S17E05.720p.HDTV.X264-DIMENSION ] [ Uploaded by: Anonymous ] [ Category: TV/HD-X264 ] [ Size: 913.12 MB ] [ https://crazy-mayhem.ninja/details.php?id=36972 ]-->
+				<regex value="^.* \[ (.*) \] \[ Uploaded by: (.*) \] \[ Category: (.*) \] \[ Size: (.*) \] \[ https?:\/\/(.*)details\.php\?id=(\d*) \]"/>
+				<vars>
+					<var name="torrentName"/>
+					<var name="uploader"/>
+					<var name="category"/>
+					<var name="torrentSize"/>
+					<var name="$baseUrl"/>
+					<var name="$torrentId"/>
+				</vars>
+			</extract>
+		</linepatterns>
+		<linematched>
+			<var name="torrentUrl">
+				<string value="https://"/>
+				<var name="$baseUrl"/>
+				<string value="download.php?torrent="/>
+				<var name="$torrentId"/>
+				<string value="&amp;passkey="/>
+				<var name="passkey"/>
+			</var>
+		</linematched>
+		<ignore>
+			<regex value="/details\.php" expected="false"/>
+		</ignore>
+	</parseinfo>
+</trackerinfo>
